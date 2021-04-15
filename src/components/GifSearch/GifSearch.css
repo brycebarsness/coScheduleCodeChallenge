@@ -2,7 +2,7 @@
   text-align: center;
 }
 .header {
-  background-color: darkblue;
+  background-color: #0d4970;
   padding: 2rem;
   color: white;
 }
@@ -27,5 +27,5 @@ img {
 Button {
   margin: 1rem;
   color: white;
-  background: darkblue;
+  background: #0d4970;
 }

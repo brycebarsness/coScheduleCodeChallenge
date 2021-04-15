@@ -8,3 +8,18 @@ CREATE TABLE "user" (
     "username" VARCHAR (80) UNIQUE NOT NULL,
     "password" VARCHAR (1000) NOT NULL
 );
+
+CREATE TABLE "category" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR (100) NOT NULL
+);
+
+CREATE TABLE "favorites" (
+    "id" SERIAL PRIMARY KEY,
+    "url" VARCHAR (200),
+    "category_id" INT REFERENCES "category",
+    "caption" VARCHAR (200)
+);
+
+INSERT INTO "category" ("name")
+VALUES ('funny'), ('cohort'), ('cartoon'), ('nsfw'), ('meme');

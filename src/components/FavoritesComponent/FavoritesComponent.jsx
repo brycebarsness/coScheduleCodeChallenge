@@ -54,6 +54,7 @@ function FavoritesComponent() {
       <div className="app">
         <div className="header">
           <h1>Favorite Editer</h1>
+          <h4>Don't forget to add a caption and save your reaction.</h4>
         </div>
       </div>
 

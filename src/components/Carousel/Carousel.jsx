@@ -211,6 +211,10 @@ const ParallaxCarousel = () => {
       <div className="app">
         <div className="header">
           <h1>Favorites Library</h1>
+          <h4>
+            Use the arrows or click on the dots to flip through the giphy
+            library.
+          </h4>
         </div>
       </div>
       <div className={classes.root}>

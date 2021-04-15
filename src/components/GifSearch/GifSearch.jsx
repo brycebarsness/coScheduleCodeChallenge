@@ -58,9 +58,12 @@ function SearchGifs() {
       <div className="app">
         <div className="header">
           <h1>Giphy Search!</h1>
+          <h4>
+            Search for giphs, favorite them, edit them, and save them in the
+            Library.
+          </h4>
         </div>
       </div>
-
       <div className="inputForm">
         <form onSubmit={retriveGihpy}>
           <TextField
