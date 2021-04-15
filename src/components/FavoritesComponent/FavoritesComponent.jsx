@@ -44,7 +44,7 @@ function FavoritesComponent() {
     },
     gridList: {
       width: 500,
-      height: 450,
+      height: 550,
     },
   });
   const classes2 = useStyles2();
@@ -59,7 +59,7 @@ function FavoritesComponent() {
 
       <>
         <div className={classes2.root}>
-          <GridList cellHeight={450} className={classes.gridList} cols={3}>
+          <GridList cellHeight={550} className={classes.gridList} cols={3}>
             {favoritesList.map((favorite) => (
               <GridListTile key={favorite.id}>
                 <div className="card">

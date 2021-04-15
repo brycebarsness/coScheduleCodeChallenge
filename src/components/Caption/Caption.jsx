@@ -61,7 +61,11 @@ function SetCaption(props) {
         <Button
           size="small"
           color="primary"
-          onClick={() => handleCaptionToggle}
+          onClick={() =>
+            newCaptionToggle
+              ? setNewCaptionToggle(false)
+              : setNewCaptionToggle(true)
+          }
         >
           New Caption
         </Button>
