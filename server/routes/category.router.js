@@ -16,18 +16,5 @@ router.get("/", (req, res) => {
       res.sendStatus(500);
     });
 });
-router.put(`/:id`, (req, res) => {
-  let queryText = `UPDATE "favorites" SET "category_id" = $1 WHERE "id" = $2`;
-  console.log(req.body, req.params);
-
-  pool
-    .query(queryText, [req.body.category, req.params.id])
-    .then((result) => {
-      res.sendStatus(200);
-    })
-    .catch((error) => {
-      res.sendStatus(500);
-    });
-});
 
 module.exports = router;

@@ -1,0 +1,29 @@
+.app {
+  text-align: center;
+}
+.header {
+  background-color: #4e067e;
+  padding: 2rem;
+  color: white;
+}
+.inputForm {
+  margin: 1rem;
+}
+.inputForm Button {
+  margin: 1rem;
+}
+.inputForm input {
+  width: 15rem;
+}
+img {
+  height: 25rem;
+  margin: 1rem;
+}
+
+.nav-text {
+  color: white;
+  text-decoration: none;
+}
+Button {
+  margin: 1rem;
+}

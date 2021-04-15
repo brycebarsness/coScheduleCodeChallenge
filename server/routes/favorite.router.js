@@ -1,76 +1,108 @@
 const express = require("express");
 const pool = require("../modules/pool");
+const { default: axios } = require("axios");
 
 const router = express.Router();
+console.log(`your API key is:${process.env.GIPHY_API_KEY}`);
+
+router.get("/search/:search", (req, res) => {
+  const GIPHY_URL = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.GIPHY_API_KEY}&q=${req.params.search}&limit=10`;
+
+  axios
+    .get(GIPHY_URL)
+    .then((response) => {
+      res.status(200).send(response.data);
+    })
+    .catch((err) => {
+      console.log("Error getting gif", err.response);
+      res.send(500);
+    });
+});
 
 // return all favorite images
 router.get("/", (req, res) => {
-  const queryText = `SELECT * FROM favorites`;
+  console.log("retrieving all favorites");
+  const queryText = `SELECT f.id, url, category_id, name FROM "favorites" as f
+                    FULL OUTER JOIN "category" as c on f."category_id" = c."id"
+                    WHERE f.id IS NOT NULL ORDER BY f.id ASC;`;
+
   pool
     .query(queryText)
     .then((response) => {
-      res.send(response.rows);
+      console.log("Retrieved all favorites successfully");
+      res.status(200).send(response.rows);
     })
-    .catch((error) => {
-      console.log(`Error on query ${error}`);
+    .catch((err) => {
+      console.log("Error in get", err);
       res.sendStatus(500);
     });
 });
 
 // add a new favorite
-router.post("/", (req, res) => {
-  const gifToAdd = req.body;
-  console.log(`Adding new favorite`, gifToAdd);
-  let queryText = `INSERT INTO "favorites" ("url", "title", "category_id", "comments") VALUES ($1, $2, $3, $4)`;
+router.post("/addfavorite", (req, res) => {
+  console.log("Adding gif to favorites");
+  const gifUrl = req.body.payload;
+
+  if (!gifUrl) {
+    console.log("Please post valid responses");
+    res.sendStatus(400);
+    return;
+  }
+
+  const queryText = `INSERT INTO "favorites" ("url") VALUES ($1);`;
+
   pool
-    .query(queryText, [
-      gifToAdd.images.downsized_medium.url,
-      gifToAdd.title,
-      gifToAdd.category_id,
-      gifToAdd.comments,
-    ])
-    .then((result) => {
-      console.log("added gif to the favorite table");
+    .query(queryText, [gifUrl])
+    .then(() => {
+      console.log("Favorite added successfully");
       res.sendStatus(201);
     })
-    .catch((error) => {
-      console.log("error adding gif to favorite table", error);
+    .catch((err) => {
+      console.log("Error in post", err);
       res.sendStatus(500);
     });
 });
 
 // update given favorite with a category id
-// router.put("/:favId", (req, res) => {
-//   const gifToChange = req.body;
-//   console.log(`changing new favorite to category`, favID);
-//   let queryText = `INSERT INTO "favorites" ("url", "title", "category_id", "comments") VALUES ($1, $2, ${favID}, $3)`;
-//   pool
-//     .query(queryText, [
-//       gifToChange.images.downsized_medium.url,
-//       gifToChange.title,
-//       gifToChange.comments,
-//     ])
-//     .then((result) => {
-//       console.log("changing git category to", favID);
-//       res.sendStatus(201);
-//     })
-//     .catch((error) => {
-//       console.log("error changing git category", error);
-//       res.sendStatus(500);
-//     });
-// });
+router.put("/category/:favId", (req, res) => {
+  // req.body should contain a category_id to add to this favorite image
+  const gifId = req.params.favId;
+  const catId = req.body.payload;
+  console.log(
+    `Updating the category at favId: ${gifId} to category Id: ${catId}`
+  );
+  console.log(catId, gifId);
+  const queryText = `UPDATE "favorites" SET "category_id" = $1
+                    WHERE "id" = $2;`;
+
+  pool
+    .query(queryText, [catId, gifId])
+    .then(() => {
+      console.log(
+        `Updated the category at favId: ${gifId} to category Id: ${catId} successfully`
+      );
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log("Error in update", err);
+      res.sendStatus(500);
+    });
+});
 
 // delete a favorite
-router.delete("/:id", (req, res) => {
-  console.log(`deleting gif with id ${req.params.id}`);
-  queryText = `DELETE FROM favorites WHERE id=${req.params.id}`;
+router.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  console.log("Deleting favorite at id:", id);
+  const queryText = `DELETE FROM "favorites" WHERE "id" = $1;`;
+
   pool
-    .query(queryText)
-    .then((response) => {
+    .query(queryText, [id])
+    .then(() => {
+      console.log(`Deleted at id: ${id} successfully`);
       res.sendStatus(204);
     })
     .catch((err) => {
-      console.log(err);
+      console.log("Error in delete", err);
       res.sendStatus(500);
     });
 });
