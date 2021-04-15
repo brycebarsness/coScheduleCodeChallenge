@@ -2,7 +2,7 @@
   text-align: center;
 }
 .header {
-  background-color: #4e067e;
+  background-color: darkblue;
   padding: 2rem;
   color: white;
 }
@@ -26,4 +26,6 @@ img {
 }
 Button {
   margin: 1rem;
+  color: white;
+  background: darkblue;
 }

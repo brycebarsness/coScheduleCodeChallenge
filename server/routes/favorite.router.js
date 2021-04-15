@@ -6,7 +6,7 @@ const router = express.Router();
 console.log(`your API key is:${process.env.GIPHY_API_KEY}`);
 
 router.get("/search/:search", (req, res) => {
-  const GIPHY_URL = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.GIPHY_API_KEY}&q=${req.params.search}&limit=10`;
+  const GIPHY_URL = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.GIPHY_API_KEY}&q=${req.params.search}&limit=15`;
 
   axios
     .get(GIPHY_URL)
@@ -22,7 +22,7 @@ router.get("/search/:search", (req, res) => {
 // return all favorite images
 router.get("/", (req, res) => {
   console.log("retrieving all favorites");
-  const queryText = `SELECT f.id, url, category_id, name FROM "favorites" as f
+  const queryText = `SELECT f.id, url, caption, category_id, name FROM "favorites" as f
                     FULL OUTER JOIN "category" as c on f."category_id" = c."id"
                     WHERE f.id IS NOT NULL ORDER BY f.id ASC;`;
 
@@ -103,6 +103,30 @@ router.delete("/delete/:id", (req, res) => {
     })
     .catch((err) => {
       console.log("Error in delete", err);
+      res.sendStatus(500);
+    });
+});
+
+// update given favorite with caption
+router.put("/caption/:favId", (req, res) => {
+  // req.body should contain a caption to add to this favorite image
+  const gifId = req.params.favId;
+  const caption = req.body.payload;
+  console.log(`Updating the caption at favId: ${gifId} to caption: ${caption}`);
+  console.log(caption, gifId);
+  const queryText = `UPDATE "favorites" SET "caption" = $1
+                    WHERE "id" = $2;`;
+
+  pool
+    .query(queryText, [caption, gifId])
+    .then(() => {
+      console.log(
+        `Updated the caption at favId: ${gifId} to caption: ${caption} successfully`
+      );
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log("Error in update caption", err);
       res.sendStatus(500);
     });
 });

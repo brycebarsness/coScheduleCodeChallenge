@@ -1,20 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { HashRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import "./GifSearch.css";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import FavoritesComponent from "../FavoritesComponent/FavoritesComponent.jsx";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import FavoriteRoundedIcon from "@material-ui/icons/FavoriteRounded";
 
 function SearchGifs() {
   const [category, setNewCategory] = useState("");
@@ -26,6 +21,7 @@ function SearchGifs() {
   const retriveGihpy = (event) => {
     event.preventDefault();
     dispatch({ type: "NEW_GIPHY", payload: category });
+    setNewCategory("");
   };
 
   useEffect(() => {
@@ -38,6 +34,7 @@ function SearchGifs() {
     media: {
       height: 240,
     },
+    button: { color: "white", backgroundColor: "darkblue" },
   });
 
   const classes = useStyles();
@@ -48,7 +45,6 @@ function SearchGifs() {
       flexWrap: "wrap",
       justifyContent: "space-around",
       overflow: "hidden",
-      //   backgroundColor: theme.palette.background.paper,
     },
     gridList: {
       width: 500,
@@ -59,26 +55,12 @@ function SearchGifs() {
 
   return (
     <div>
-      <Router>
-        <div className="app">
-          <div className="header">
-            <h1>Giphy Search!</h1>
-            <nav>
-              <Button variant="contained" color="primary"></Button>
-              <Button variant="contained" color="primary">
-                <Link to="/favorites" className="nav-text">
-                  Favorites
-                </Link>
-              </Button>
-            </nav>
-          </div>
-          <Switch>
-            <Route path="/favorites">
-              <FavoritesComponent />
-            </Route>
-          </Switch>
+      <div className="app">
+        <div className="header">
+          <h1>Giphy Search!</h1>
         </div>
-      </Router>
+      </div>
+
       <div className="inputForm">
         <form onSubmit={retriveGihpy}>
           <TextField
@@ -89,7 +71,7 @@ function SearchGifs() {
             onChange={(event) => setNewCategory(event.target.value)}
           />
           <br />
-          <Button variant="contained" color="primary" type="submit">
+          <Button variant="contained" type="submit" className={classes.button}>
             SEARCH
           </Button>
         </form>
@@ -107,8 +89,12 @@ function SearchGifs() {
                     />
 
                     <Button
+                      className={classes.button}
+                      style={{
+                        color: "white",
+                        backgroundColor: "darkblue",
+                      }}
                       variant="contained"
-                      color="primary"
                       onClick={() => {
                         alert("Added to favorites list");
                         dispatch({
@@ -116,6 +102,7 @@ function SearchGifs() {
                           payload: gif.images.downsized_large.url,
                         });
                       }}
+                      endIcon={<FavoriteRoundedIcon />}
                     >
                       Favorite
                     </Button>

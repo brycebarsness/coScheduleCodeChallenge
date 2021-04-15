@@ -28,10 +28,22 @@ function* addFavoriteSaga(action) {
   }
 }
 
+function* setCaptionSaga(action) {
+  try {
+    yield axios.put(`api/favorite/caption/${action.payload.gifId}`, {
+      payload: action.payload.caption,
+    });
+    yield put({ type: "FETCH_FAVORITES" });
+  } catch (error) {
+    console.log("Error in add", error);
+  }
+}
+
 function* favoritesSaga() {
   yield takeEvery("FETCH_FAVORITES", fetchFavoritesSaga);
   yield takeEvery("REMOVE_FAVORITE", removeFavoriteSaga);
   yield takeEvery("ADD_FAVORITE", addFavoriteSaga);
+  yield takeEvery("SET_CAPTION", setCaptionSaga);
 }
 
 export default favoritesSaga;

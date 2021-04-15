@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import cx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +9,7 @@ import ParallaxSlide from "@mui-treasury/components/slide/parallax";
 import DotIndicator from "@mui-treasury/components/indicator/dot";
 import { useArrowDarkButtonStyles } from "@mui-treasury/styles/button/arrowDark";
 import { useDispatch, useSelector } from "react-redux";
+import "./Carousel.css";
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   root: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     width: "100%",
   },
   slide: {
-    perspective: 2000, // create perspective
+    perspective: 1500, // create perspective
     overflow: "hidden",
     // relative is a must if you want to create overlapping layers in children
     position: "relative",
@@ -64,7 +65,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   },
   text: {
     // shared style for text-top and text-bottom
-    fontFamily: "Poppins, san-serif",
+    fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sansSerif",
     fontWeight: 900,
     position: "absolute",
     color: palette.common.white,
@@ -83,33 +84,33 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     top: 40,
     left: "20%",
     height: "50%",
-    fontSize: 15,
+    fontSize: 25,
     zIndex: 1,
     background: "linear-gradient(0deg, rgba(255,255,255,0) 0%, #9c9c9c 100%)",
     [breakpoints.up("sm")]: {
       top: 52,
-      fontSize: 25,
+      fontSize: 35,
     },
     [breakpoints.up("md")]: {
       top: 64,
-      fontSize: 30,
+      fontSize: 45,
     },
   },
   subtitle: {
     top: 56,
     left: "0%",
     height: "62%",
-    fontSize: 52,
+    fontSize: 40,
     zIndex: 2,
     background: "linear-gradient(0deg, rgba(255,255,255,0) 0%, #888888 100%)",
     [breakpoints.up("sm")]: {
       top: 96,
       left: "6%",
-      fontSize: 80,
+      fontSize: 52,
     },
     [breakpoints.up("md")]: {
       top: 104,
-      fontSize: 80,
+      fontSize: 68,
     },
   },
   indicatorContainer: {
@@ -119,6 +120,10 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
 
 const ParallaxCarousel = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: "FETCH_FAVORITES" });
+  }, []);
   const favoritesList = useSelector(
     (store) => store.favorites.favoritesReducer
   );
@@ -169,14 +174,14 @@ const ParallaxCarousel = () => {
           className={cx(classes.text, classes.title)}
           style={{ ...injectStyle(i, 70), ...createStyle(i, fineIndex) }}
         >
-          {gif.name}
+          {gif.caption ? gif.caption : "Add a caption, click Edit Favorites"}
         </Typography>
         <Typography
           noWrap
           className={cx(classes.text, classes.subtitle)}
           style={{ ...injectStyle(i, 70), ...createStyle(i, fineIndex) }}
         >
-          subtitle
+          {gif.name ? gif.name : "Rate this Giph"}
         </Typography>
         <div className={classes.imageContainer}>
           <img
@@ -184,8 +189,8 @@ const ParallaxCarousel = () => {
             src={gif.url}
             alt={"slide"}
             style={{
-              height: "250px",
-              width: "350px",
+              height: "300px",
+              width: "370px",
               objectFit: "cover",
               borderRadius: "1%",
               border: "solid grey 2px",
@@ -202,10 +207,17 @@ const ParallaxCarousel = () => {
       </div>
     ));
   return (
-    <div className={classes.root}>
-      <ParallaxSlide renderElements={renderElements}>
-        {renderChildren}
-      </ParallaxSlide>
+    <div>
+      <div className="app">
+        <div className="header">
+          <h1>Favorites Library</h1>
+        </div>
+      </div>
+      <div className={classes.root}>
+        <ParallaxSlide renderElements={renderElements}>
+          {renderChildren}
+        </ParallaxSlide>
+      </div>
     </div>
   );
 };

@@ -12,6 +12,8 @@ import "./FavoritesComponent.css";
 import Grid from "@material-ui/core/Grid";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
+import { useState } from "react";
+import Caption from "../Caption/Caption";
 
 function FavoritesComponent() {
   const favoritesList = useSelector(
@@ -19,7 +21,6 @@ function FavoritesComponent() {
   );
   const categoryList = useSelector((store) => store.category.categoryReducer);
   const dispatch = useDispatch();
-  const reduxStore = useSelector((store) => store);
 
   useEffect(() => {
     dispatch({ type: "FETCH_FAVORITES" });
@@ -40,7 +41,6 @@ function FavoritesComponent() {
       flexWrap: "wrap",
       justifyContent: "space-around",
       overflow: "hidden",
-      //   backgroundColor: theme.palette.background.paper,
     },
     gridList: {
       width: 500,
@@ -48,70 +48,84 @@ function FavoritesComponent() {
     },
   });
   const classes2 = useStyles2();
+
   return (
-    <>
-      <div className={classes2.root}>
-        <GridList cellHeight={450} className={classes.gridList} cols={3}>
-          {favoritesList.map((favorite) => (
-            <GridListTile>
-              <div className="card" key={favorite.id}>
-                <Card className={classes.root}>
-                  <CardActionArea>
-                    <CardMedia className={classes.media} image={favorite.url} />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        <p>
-                          Category:{" "}
-                          {favorite.name
-                            ? favorite.name
-                            : categoryList.map((category) => {
-                                return (
-                                  <>
-                                    <input
-                                      type="radio"
-                                      name="category"
-                                      id={category.id}
-                                      onChange={() =>
-                                        dispatch({
-                                          type: "SET_CATEGORYID",
-                                          payload: {
-                                            categoryId: category.id,
-                                            gifId: favorite.id,
-                                          },
-                                        })
-                                      }
-                                    />
-                                    <label htmlFor={category.id}>
-                                      {category.name}
-                                    </label>
-                                  </>
-                                );
-                              })}
-                        </p>
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() =>
-                        dispatch({
-                          type: "REMOVE_FAVORITE",
-                          payload: favorite.id,
-                        })
-                      }
-                    >
-                      Remove From Favorites
-                    </Button>
-                  </CardActions>
-                </Card>
-              </div>
-            </GridListTile>
-          ))}
-        </GridList>
+    <div>
+      <div className="app">
+        <div className="header">
+          <h1>Favorite Editer</h1>
+        </div>
       </div>
-    </>
+
+      <>
+        <div className={classes2.root}>
+          <GridList cellHeight={450} className={classes.gridList} cols={3}>
+            {favoritesList.map((favorite) => (
+              <GridListTile key={favorite.id}>
+                <div className="card">
+                  <Card className={classes.root}>
+                    <CardActionArea>
+                      <CardMedia
+                        className={classes.media}
+                        image={favorite.url}
+                      />
+                      <CardContent>
+                        <Caption favorite={favorite} />
+                        <Typography gutterBottom variant="h5" component="h2">
+                          <p>
+                            {favorite.caption ? favorite.caption : ""}
+                            <br />
+                            {favorite.name
+                              ? favorite.name
+                              : categoryList.map((category) => {
+                                  return (
+                                    <>
+                                      <input
+                                        type="radio"
+                                        name="category"
+                                        id={category.id}
+                                        onChange={() =>
+                                          dispatch({
+                                            type: "SET_CATEGORYID",
+                                            payload: {
+                                              categoryId: category.id,
+                                              gifId: favorite.id,
+                                            },
+                                          })
+                                        }
+                                      />
+                                      <label htmlFor={category.id}>
+                                        {category.name}
+                                      </label>
+                                    </>
+                                  );
+                                })}
+                          </p>
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: "REMOVE_FAVORITE",
+                            payload: favorite.id,
+                          })
+                        }
+                      >
+                        Remove From Favorites
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </div>
+              </GridListTile>
+            ))}
+          </GridList>
+        </div>
+      </>
+    </div>
   );
 }
 
