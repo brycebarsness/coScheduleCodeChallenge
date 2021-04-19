@@ -4,6 +4,8 @@
 
 Use this application to enter the funny, weird, crazy, and at times creepy, world of giphs. After creating a user account, search for giphs and save your favorites. Add a unique caption and reaction to view later as you flip through your giphs in the giphy library. Feel free to change your caption, or, if you're collection is getting too big, make some room by clearing out the old ones.
 
+Instead of doing a star review set-up I added 5 different reactions with common texting abbreviations or phrases one would use sending the giph to a friend. I decided to look at the comments through the lens of adding a caption, which, together with the reaction, can make for funny or interesting combinations when displayed along with the giph in the giph library.
+
 ## Dependencies
 
 This application uses React, Redux, Express, Passport, and PostgreSQL (a full list of dependencies can be found in `package.json`).
