@@ -45,10 +45,8 @@ VALUES ('Um...'), ('...WTF?'), ('LOL!!'), ('ROTFL'), ('Weird Flex');
 - Create a .env file to hold Giphy API key and SERVER_SESSION_SECRET
   It should look like this...
 
-  ````SERVER_SESSION_SECRET=25POUbVtx6RKVNWszd9ER#### (replace #### with four numbers)
-  GIPHY_API_KEY= ( get an API key here --> https://developers.giphy.com/docs/api/)```
-
-  ````
+  SERVER_SESSION_SECRET=25POUbVtx6RKVNWszd9ER#### (replace #### with four numbers)
+  GIPHY_API_KEY= ( get an API key here --> https://developers.giphy.com/docs/api/)
 
 - Run `npm install`
 - Start postgres if not running already by using `brew services start postgresql`
