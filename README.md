@@ -26,6 +26,7 @@ CREATE TABLE "user" (
 
 ## Development Setup Instructions
 
+- Create a .env file to hold Giphy API key
 - Run `npm install`
 - Start postgres if not running already by using `brew services start postgresql`
 - Run `npm run server`
