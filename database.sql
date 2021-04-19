@@ -22,4 +22,4 @@ CREATE TABLE "favorites" (
 );
 
 INSERT INTO "category" ("name")
-VALUES ('funny'), ('cohort'), ('cartoon'), ('nsfw'), ('meme');
+VALUES ('Um...'), ('...WTF?'), ('LOL!!'), ('ROTFL'), ('Weird Flex');
