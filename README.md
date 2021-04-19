@@ -14,7 +14,7 @@ Before you get started, make sure you have the following software installed on y
 
 ## Create database and table
 
-Create a new database called `code_challenge` and create a `user` table:
+Create a new database called `code_challenge` and use the SQL below to set up:
 
 ```SQL
 CREATE TABLE "user" (
@@ -22,14 +22,33 @@ CREATE TABLE "user" (
     "username" VARCHAR (80) UNIQUE NOT NULL,
     "password" VARCHAR (1000) NOT NULL
 );
+
+CREATE TABLE "category" (
+    "id" SERIAL PRIMARY KEY,
+    "name" VARCHAR (100) NOT NULL
+);
+
+CREATE TABLE "favorites" (
+    "id" SERIAL PRIMARY KEY,
+    "url" VARCHAR (200),
+    "category_id" INT REFERENCES "category",
+    "caption" VARCHAR (200)
+);
+
+INSERT INTO "category" ("name")
+VALUES ('Um...'), ('...WTF?'), ('LOL!!'), ('ROTFL'), ('Weird Flex');
+
 ```
 
 ## Development Setup Instructions
 
 - Create a .env file to hold Giphy API key and SERVER_SESSION_SECRET
   It should look like this...
-  SERVER_SESSION_SECRET=25POUbVtx6RKVNWszd9ER#### (replace #### with four numbers)
-  GIPHY_API_KEY= ( get an API key here --> https://developers.giphy.com/docs/api/)
+
+  ````SERVER_SESSION_SECRET=25POUbVtx6RKVNWszd9ER#### (replace #### with four numbers)
+  GIPHY_API_KEY= ( get an API key here --> https://developers.giphy.com/docs/api/)```
+
+  ````
 
 - Run `npm install`
 - Start postgres if not running already by using `brew services start postgresql`
